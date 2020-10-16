@@ -16,7 +16,7 @@
  * in order to get wind speed , wind gust and more.
  * From this response I extract weather data and display it in a window on a raspberry pi
  * Written by Larry Bonnette October 2020
- */  
+ */
 
 
 #include "mainwindow.h"
@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     timer = new QTimer(this); // set up timer
     connect(timer,SIGNAL(timeout()),this,SLOT(getWeather()));
-    timer->start(30000); // Starting the 30 second timer
+    timer->start(180000); // Starting the 3 minute timer
     getWeather(); // Get weather from weather station for the first time
 }
 
@@ -49,7 +49,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::getWeather() // This function will get kicked off when timer times out
+void MainWindow::getWeather() // This function will get kicked off when timer times out openweather.com only allows 60 queries per hour (for free) so getting the weather
+                              // every 3 minutes burns up only 20 queries
 {
     QDate date = QDate::currentDate();
     ui->date_lbl->setText(date.toString("MMM-dd-yyyy"));
@@ -62,7 +63,7 @@ void MainWindow::getWeather() // This function will get kicked off when timer ti
     QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
 
     // the HTTP request
-    QNetworkRequest req( QUrl( QString("http://api.openweathermap.org/data/2.5/onecall?lat=30.22&lon=-95.36&exclude=hourly,minutely,alerts,daily&units=imperial&appid={Add your own user key}") ) );
+    QNetworkRequest req( QUrl( QString("http://api.openweathermap.org/data/2.5/onecall?lat=30.22&lon=-95.36&exclude=hourly,minutely,alerts,daily&units=imperial&appid=c3f3c20cf253315f8646755291334ab0") ) );
     QNetworkReply *reply = mgr.get(req);
     eventLoop.exec(); // blocks stack until "finished()" has been called
 
