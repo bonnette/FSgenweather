@@ -1,5 +1,9 @@
 /* The is the Full Screen (FS) version of the genweather app.
- *   This program interigates the openweathermap.org website to get JSON info from it.
+ *   This program integrates the openweathermap.org website to get JSON info from it.
+ *
+ * The request looks like this: http://api.openweathermap.org/data/2.5/onecall?lat=30.22&lon=-95.36&exclude=hourly,minutely,alerts,daily&units=imperial&appid={your key}
+ * The above request current weather for Conroe Tx.
+ *
  *  The response looks something like this:
  *  {
  * "lat":30.22,
@@ -12,7 +16,7 @@
  * }
  * }
  *
- * This version looks a little different because it interigates the website a little differently
+ * This version looks a little different because it integrates with the website a little differently
  * in order to get wind speed , wind gust and more.
  * From this response I extract weather data and display it in a window on a raspberry pi
  * Written by Larry Bonnette October 2020
@@ -63,7 +67,7 @@ void MainWindow::getWeather() // This function will get kicked off when timer ti
     QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
 
     // the HTTP request
-    QNetworkRequest req( QUrl( QString("http://api.openweathermap.org/data/2.5/onecall?lat=30.22&lon=-95.36&exclude=hourly,minutely,alerts,daily&units=imperial&appid={Add you own key}") ) );
+    QNetworkRequest req( QUrl( QString("http://api.openweathermap.org/data/2.5/onecall?lat=30.22&lon=-95.36&exclude=hourly,minutely,alerts,daily&units=imperial&appid=c3f3c20cf253315f8646755291334ab0") ) );
     QNetworkReply *reply = mgr.get(req);
     eventLoop.exec(); // blocks stack until "finished()" has been called
 
@@ -144,17 +148,24 @@ void MainWindow::getWeather() // This function will get kicked off when timer ti
          }
 
 
-         ui->speed_lbl->setText(current_map["wind_speed"].toString());
+         ui->speed_lbl->setText(current_map["wind_speed"].toString() + " mph");
 
-         ui->gust_lbl->setText(current_map["wind_gust"].toString());
-         qDebug() << current_map["wind_gust"].toString();
+         // openweathermap.com does not include gust data if it is zero so to take care of that
+         if (current_map["wind_gust"].toString() == "") {
+           ui->gust_lbl->setText("Gust 0");
+         }
+         else {
+         ui->gust_lbl->setText("Gust " + current_map["wind_gust"].toString());
+         }
+
+         //qDebug() << current_map["wind_gust"].toString();
 
         QString press = current_map["pressure"].toString();
          double bpress = press.toDouble();  //Convert  string to double
          bpress = (bpress * 0.029530); //Convert milibar to inches of mercury
          QString npress = QString::number(bpress,'f',2);  //Convert double to string to display in label the "(num,'f',2)" formats for 2 decimal places only.
 
-         ui->press_lbl->setText(npress);  // display pressure in inches
+         ui->press_lbl->setText(npress + " in");  // display pressure in inches
 }
 }
 
