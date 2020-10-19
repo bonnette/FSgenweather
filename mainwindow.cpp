@@ -67,7 +67,7 @@ void MainWindow::getWeather() // This function will get kicked off when timer ti
     QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
 
     // the HTTP request
-    QNetworkRequest req( QUrl( QString("http://api.openweathermap.org/data/2.5/onecall?lat=30.22&lon=-95.36&exclude=hourly,minutely,alerts,daily&units=imperial&appid=c3f3c20cf253315f8646755291334ab0") ) );
+    QNetworkRequest req( QUrl( QString("http://api.openweathermap.org/data/2.5/onecall?lat=30.22&lon=-95.36&exclude=hourly,minutely,alerts,daily&units=imperial&appid={Add your Key}") ) );
     QNetworkReply *reply = mgr.get(req);
     eventLoop.exec(); // blocks stack until "finished()" has been called
 
