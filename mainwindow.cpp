@@ -67,7 +67,7 @@ void MainWindow::getWeather() // This function will get kicked off when timer ti
     QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
 
     // the HTTP request
-    QNetworkRequest req( QUrl( QString("http://api.openweathermap.org/data/2.5/onecall?lat=30.22&lon=-95.36&exclude=hourly,minutely,alerts,daily&units=imperial&appid={Add your key here}") ) );
+    QNetworkRequest req( QUrl( QString("http://api.openweathermap.org/data/2.5/onecall?lat=30.22&lon=-95.36&exclude=hourly,minutely,alerts,daily&units=imperial&appid=c3f3c20cf253315f8646755291334ab0") ) );
     QNetworkReply *reply = mgr.get(req);
     eventLoop.exec(); // blocks stack until "finished()" has been called
 
@@ -86,7 +86,9 @@ void MainWindow::getWeather() // This function will get kicked off when timer ti
         //ui->incomingtxtlbl->setText(strReply); // Places all of the weather station text into a large label.
 
 
-        ui->temp_lbl->setText(current_map["temp"].toString() + " F"); // Extract the temperature from the "current_map" key "temp" and place it in a label.
+        double temp_num = current_map["temp"].toDouble();  //Convert  string to double to limit decimal places
+        QString temp_str = QString::number(temp_num,'f',1);  //Convert double to string to display in label the "(num,'f',2)" formats for 2 decimal places only.
+        ui->temp_lbl->setText(temp_str + " F"); // place manipulated temperature into label
 
         ui->humid_lbl->setText(current_map["humidity"].toString() + " %");
 
@@ -148,14 +150,18 @@ void MainWindow::getWeather() // This function will get kicked off when timer ti
          }
 
 
-         ui->speed_lbl->setText(current_map["wind_speed"].toString() + " mph");
+         double speed_num = current_map["wind_speed"].toDouble();  //Convert  string to double to limit decimal places
+         QString speed_str = QString::number(speed_num,'f',1);  //Convert double to string to display in label the "(num,'f',2)" formats for 2 decimal places only.
+         ui->speed_lbl->setText(speed_str + " mph");
 
          // openweathermap.com does not include gust data if it is zero so to take care of that
          if (current_map["wind_gust"].toString() == "") {
            ui->gust_lbl->setText("Gust 0");
          }
          else {
-         ui->gust_lbl->setText("Gust " + current_map["wind_gust"].toString());
+             double gust_num = current_map["wind_gust"].toDouble();  //Convert  string to double to limit decimal places
+             QString gust_str = QString::number(gust_num,'f',1);  //Convert double to string to display in label the "(num,'f',2)" formats for 2 decimal places only.
+             ui->gust_lbl->setText("Gust " + gust_str);
          }
 
          //qDebug() << current_map["wind_gust"].toString();
