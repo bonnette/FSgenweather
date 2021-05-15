@@ -20,7 +20,7 @@ public slots:
 
 private:
     Ui::MainWindow *ui;
-    QTimer *timer; // added a timer to get weather station data every 30 seconds.
+    QTimer *timer; // added a timer to get weather station data every 3 minutes.
 };
 
 #endif // MAINWINDOW_H

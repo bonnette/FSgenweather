@@ -78,12 +78,12 @@ void MainWindow::getWeather() // This function will get kicked off when timer ti
 
         //qDebug() << strReply;
 
-        QFile file("/home/pi/wthr.dat"); // Write the weather data recieved to a file "wthr.dat"
+        QFile file("/home/pi/wthr.dat"); // Create and open file "wthr.dat"
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
             return;
 
         QTextStream out(&file);
-        out << strReply;
+        out << strReply; // Place all of the weather data recieved from openweathermap.com into the "wthr.dat" file.
 
         QJsonDocument jsonResponse = QJsonDocument::fromJson(strReply.toUtf8());  //Convert JSON from website to JSON Document
 
