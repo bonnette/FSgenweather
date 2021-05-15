@@ -1,5 +1,5 @@
-/* The is the Full Screen (FS) version of the genweather app.
- *   This program integrates the openweathermap.org website to get JSON info from it.
+/* This is the Full Screen (FS) version of the genweather app.
+ * This program interrogates the openweathermap.org website to get JSON formatted weather information.
  *
  * The request looks like this: http://api.openweathermap.org/data/2.5/onecall?lat=30.22&lon=-95.36&exclude=hourly,minutely,alerts,daily&units=imperial&appid={your key}
  * The above request current weather for Conroe Tx.
@@ -18,8 +18,9 @@
  *
  * This version looks a little different because it integrates with the website a little differently
  * in order to get wind speed , wind gust and more.
- * From this response I extract weather data and display it in a window on a raspberry pi
- * Written by Larry Bonnette October 2020
+ * From this response, weather data is extracted and displayed it in a full screen window on a raspberry pi
+ * Written by Larry Bonnette October 2020 Modified May 2021
+ * The modification writes weather information recieved into a file "wthr.dat".
  */
 
 
